@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Chatbot</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; }
+    #messages { height: 300px; overflow-y: scroll; border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; }
+    #input { width: 100%; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Chatbot</h1>
+  <div id="messages"></div>
+  <input id="input" placeholder="Type a message..." />
+
+  <script>
+    const messagesDiv = document.getElementById('messages');
+    const input = document.getElementById('input');
+
+    // Connect to WebSocket server
+    const socket = new WebSocket('ws://localhost:3000');
+
+    // Handle incoming messages
+    socket.onmessage = (event) => {
+      const message = document.createElement('div');
+      message.textContent = event.data;
+      messagesDiv.appendChild(message);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to the bottom
+    };
+
+    // Send a message to the WebSocket server when Enter is pressed
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const message = input.value.trim();
+        if (message) {
+          socket.send(message);
+          const userMessage = document.createElement('div');
+          userMessage.textContent = `You: ${message}`;
+          messagesDiv.appendChild(userMessage);
+          input.value = '';
+        }
+      }
+    });
+  </script>
+</body>
+</html>
