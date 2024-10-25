@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NodeJS Hello</title>
+</head>
+<body>
+    <h1>home page</h1>
+    <hr>
+    <p id="Message_content"></p>
+    <button id="hello_btn"> Hello Message</button>
+    
+
+    <script>
+        document.getElementById('hello_btn').addEventListener('click', function() {
+            fetch('/gethello')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('Message_content').innerText = data;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
